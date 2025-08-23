@@ -5,6 +5,8 @@ import morgan from 'morgan'
 import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import todoRoutes from './routes/todos'
+import SupabaseService from './services/supabaseService'
+import { ensureTablesExist, createSampleData } from './services/databaseSetup'
 
 dotenv.config()
 
@@ -39,6 +41,20 @@ app.use((error: Error, req: express.Request, res: express.Response, next: expres
   res.status(500).json({ error: 'Something went wrong!' })
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`)
+  
+  // Test database connection and setup
+  try {
+    const supabaseService = SupabaseService.getInstance()
+    const isConnected = await supabaseService.testConnection()
+    console.log(`Database connection: ${isConnected ? 'SUCCESS' : 'FAILED'}`)
+    
+    if (isConnected) {
+      await ensureTablesExist()
+      await createSampleData()
+    }
+  } catch (error) {
+    console.error('Database setup failed:', error)
+  }
 })

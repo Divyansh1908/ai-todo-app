@@ -11,8 +11,8 @@ import { cn, formatDate, getPriorityColor, getStatusColor } from '@/lib/utils'
 
 interface TodoItemProps {
   todo: Todo
-  onUpdate: (id: string, updates: Partial<Todo>) => void
-  onDelete: (id: string) => void
+  onUpdate: (id: string, updates: Partial<Todo>) => Promise<void>
+  onDelete: (id: string) => Promise<void>
 }
 
 export function TodoItem({ todo, onUpdate, onDelete }: TodoItemProps) {
@@ -20,12 +20,16 @@ export function TodoItem({ todo, onUpdate, onDelete }: TodoItemProps) {
   const [editTitle, setEditTitle] = useState(todo.title)
   const [editDescription, setEditDescription] = useState(todo.description || '')
 
-  const handleSave = () => {
-    onUpdate(todo.id, {
-      title: editTitle,
-      description: editDescription
-    })
-    setIsEditing(false)
+  const handleSave = async () => {
+    try {
+      await onUpdate(todo.id, {
+        title: editTitle,
+        description: editDescription
+      })
+      setIsEditing(false)
+    } catch (error) {
+      console.error('Failed to update todo:', error)
+    }
   }
 
   const handleCancel = () => {
@@ -34,11 +38,15 @@ export function TodoItem({ todo, onUpdate, onDelete }: TodoItemProps) {
     setIsEditing(false)
   }
 
-  const handleToggleComplete = () => {
-    onUpdate(todo.id, { 
-      completed: !todo.completed,
-      status: !todo.completed ? 'completed' : 'todo'
-    })
+  const handleToggleComplete = async () => {
+    try {
+      await onUpdate(todo.id, { 
+        completed: !todo.completed,
+        status: !todo.completed ? 'completed' : 'todo'
+      })
+    } catch (error) {
+      console.error('Failed to toggle todo:', error)
+    }
   }
 
   const isOverdue = todo.dueDate && new Date(todo.dueDate) < new Date() && !todo.completed
@@ -152,7 +160,13 @@ export function TodoItem({ todo, onUpdate, onDelete }: TodoItemProps) {
             <Button
               size="sm"
               variant="ghost"
-              onClick={() => onDelete(todo.id)}
+              onClick={async () => {
+                try {
+                  await onDelete(todo.id)
+                } catch (error) {
+                  console.error('Failed to delete todo:', error)
+                }
+              }}
               className="h-8 w-8 p-0 hover:bg-red-100 hover:text-red-600"
             >
               <Trash2 className="h-4 w-4" />

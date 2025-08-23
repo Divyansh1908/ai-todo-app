@@ -8,7 +8,8 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "lint": "eslint src --ext .ts",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "setup-db": "ts-node src/scripts/setupDatabase.ts"
   },
   "dependencies": {
     "express": "^4.19.2",
@@ -18,7 +19,8 @@
     "express-rate-limit": "^7.4.0",
     "morgan": "^1.10.0",
     "express-validator": "^7.2.0",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "@supabase/supabase-js": "^2.45.4"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

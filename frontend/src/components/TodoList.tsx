@@ -11,12 +11,13 @@ import { cn } from '@/lib/utils'
 
 interface TodoListProps {
   todos: Todo[]
-  onUpdateTodo: (id: string, updates: Partial<Todo>) => void
-  onDeleteTodo: (id: string) => void
+  onUpdateTodo: (id: string, updates: Partial<Todo>) => Promise<void>
+  onDeleteTodo: (id: string) => Promise<void>
   categories: string[]
+  loading?: boolean
 }
 
-export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories }: TodoListProps) {
+export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loading = false }: TodoListProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<FilterStatus>('all')

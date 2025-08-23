@@ -1,39 +1,31 @@
 'use client'
 
-import { useState } from 'react'
-import { CheckSquare, Plus, BarChart3, Settings } from 'lucide-react'
-import { Todo, CreateTodoRequest } from '@/types/todo'
+import { CheckSquare, Plus, BarChart3, Settings, RefreshCw } from 'lucide-react'
+import { CreateTodoRequest } from '@/types/todo'
 import { AddTodoForm } from '@/components/AddTodoForm'
 import { TodoList } from '@/components/TodoList'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Button } from '@/components/ui/button'
-import { sampleTodos, categories } from '@/lib/sampleData'
-import { v4 as uuidv4 } from 'uuid'
+import { categories } from '@/lib/sampleData'
+import { useTodos } from '@/hooks/useTodos'
 
 export default function Home() {
-  const [todos, setTodos] = useState<Todo[]>(sampleTodos)
+  const { 
+    todos, 
+    loading, 
+    error, 
+    createTodo, 
+    updateTodo, 
+    deleteTodo,
+    refreshTodos 
+  } = useTodos()
 
-  const handleAddTodo = (todoRequest: CreateTodoRequest) => {
-    const newTodo: Todo = {
-      id: uuidv4(),
-      ...todoRequest,
-      completed: todoRequest.status === 'completed',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+  const handleAddTodo = async (todoRequest: CreateTodoRequest) => {
+    try {
+      await createTodo(todoRequest)
+    } catch (error) {
+      console.error('Failed to create todo:', error)
     }
-    setTodos(prev => [newTodo, ...prev])
-  }
-
-  const handleUpdateTodo = (id: string, updates: Partial<Todo>) => {
-    setTodos(prev => prev.map(todo => 
-      todo.id === id 
-        ? { ...todo, ...updates, updatedAt: new Date().toISOString() }
-        : todo
-    ))
-  }
-
-  const handleDeleteTodo = (id: string) => {
-    setTodos(prev => prev.filter(todo => todo.id !== id))
   }
 
   const stats = {
@@ -95,6 +87,14 @@ export default function Home() {
                 <Button variant="outline" size="sm">
                   <Settings className="h-4 w-4" />
                 </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={refreshTodos}
+                  disabled={loading}
+                >
+                  <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                </Button>
                 <ThemeToggle />
               </div>
             </div>
@@ -103,6 +103,23 @@ export default function Home() {
       </header>
 
       <div className="container mx-auto px-4 py-8">
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="flex items-center gap-2">
+              <div className="text-red-800 font-medium">Error</div>
+            </div>
+            <div className="text-red-600 text-sm mt-1">{error}</div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={refreshTodos}
+              className="mt-2"
+            >
+              Try Again
+            </Button>
+          </div>
+        )}
+        
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
@@ -179,9 +196,10 @@ export default function Home() {
             
             <TodoList
               todos={todos}
-              onUpdateTodo={handleUpdateTodo}
-              onDeleteTodo={handleDeleteTodo}
+              onUpdateTodo={updateTodo}
+              onDeleteTodo={deleteTodo}
               categories={categories}
+              loading={loading}
             />
           </div>
         </div>

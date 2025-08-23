@@ -688,6 +688,9 @@ video {
 .mb-4 {
   margin-bottom: 1rem;
 }
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
 .ml-2 {
   margin-left: 0.5rem;
 }
@@ -702,6 +705,9 @@ video {
 }
 .mt-1 {
   margin-top: 0.25rem;
+}
+.mt-2 {
+  margin-top: 0.5rem;
 }
 .mt-4 {
   margin-top: 1rem;
@@ -832,6 +838,15 @@ video {
 }
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+@keyframes spin {
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 .cursor-default {
   cursor: default;
@@ -1002,6 +1017,10 @@ video {
 .bg-red-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
+}
+.bg-red-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 242 242 / var(--tw-bg-opacity, 1));
 }
 .bg-red-50\/50 {
   background-color: rgb(254 242 242 / 0.5);
