@@ -1,15 +1,22 @@
-# filepath: .gitignore
+# filepath: /Users/divyanshsingh/AIapps/ai-todo-app/.gitignore
 # dependencies
 node_modules/
+*/node_modules/
+/**/node_modules/
 /.pnp
 .pnp.js
 
 # next.js
 /.next/
 /out/
+frontend/.next/
+frontend/out/
 
 # production
 /build
+/dist
+frontend/build/
+backend/dist/
 
 # misc
 .DS_Store
@@ -19,10 +26,28 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.nyc_output
+
+# testing
+/coverage
 
 # local env files
 .env*.local
 .env
+backend/.env
 
 # vercel
 .vercel
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db
+
+# Lock files (optional - some teams prefer to commit these)
+# package-lock.json
+# yarn.lock
