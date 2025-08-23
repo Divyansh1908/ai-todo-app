@@ -1,0 +1,191 @@
+'use client'
+
+import { useState } from 'react'
+import { CheckSquare, Plus, BarChart3, Settings } from 'lucide-react'
+import { Todo, CreateTodoRequest } from '@/types/todo'
+import { AddTodoForm } from '@/components/AddTodoForm'
+import { TodoList } from '@/components/TodoList'
+import { ThemeToggle } from '@/components/ThemeToggle'
+import { Button } from '@/components/ui/button'
+import { sampleTodos, categories } from '@/lib/sampleData'
+import { v4 as uuidv4 } from 'uuid'
+
+export default function Home() {
+  const [todos, setTodos] = useState<Todo[]>(sampleTodos)
+
+  const handleAddTodo = (todoRequest: CreateTodoRequest) => {
+    const newTodo: Todo = {
+      id: uuidv4(),
+      ...todoRequest,
+      completed: todoRequest.status === 'completed',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+    setTodos(prev => [newTodo, ...prev])
+  }
+
+  const handleUpdateTodo = (id: string, updates: Partial<Todo>) => {
+    setTodos(prev => prev.map(todo => 
+      todo.id === id 
+        ? { ...todo, ...updates, updatedAt: new Date().toISOString() }
+        : todo
+    ))
+  }
+
+  const handleDeleteTodo = (id: string) => {
+    setTodos(prev => prev.filter(todo => todo.id !== id))
+  }
+
+  const stats = {
+    total: todos.length,
+    completed: todos.filter(t => t.completed).length,
+    inProgress: todos.filter(t => t.status === 'in-progress').length,
+    overdue: todos.filter(t => 
+      t.dueDate && 
+      new Date(t.dueDate) < new Date() && 
+      !t.completed
+    ).length
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <CheckSquare className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold">AI Todo Manager</h1>
+                <p className="text-sm text-muted-foreground">
+                  Organize your tasks with intelligence
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <div className="hidden sm:flex items-center gap-4 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>{stats.total} Total</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>{stats.completed} Done</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <span>{stats.inProgress} In Progress</span>
+                </div>
+                {stats.overdue > 0 && (
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span>{stats.overdue} Overdue</span>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="sm">
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  Analytics
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Settings className="h-4 w-4" />
+                </Button>
+                <ThemeToggle />
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bg-card border rounded-lg p-6">
+              <h3 className="font-semibold mb-4 flex items-center gap-2">
+                <Plus className="h-4 w-4" />
+                Quick Stats
+              </h3>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm">Total Tasks</span>
+                  <span className="font-medium">{stats.total}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm">Completed</span>
+                  <span className="font-medium text-green-600">{stats.completed}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm">In Progress</span>
+                  <span className="font-medium text-blue-600">{stats.inProgress}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm">Pending</span>
+                  <span className="font-medium text-gray-600">
+                    {stats.total - stats.completed - stats.inProgress}
+                  </span>
+                </div>
+                {stats.overdue > 0 && (
+                  <div className="flex justify-between items-center pt-2 border-t">
+                    <span className="text-sm text-red-600">Overdue</span>
+                    <span className="font-medium text-red-600">{stats.overdue}</span>
+                  </div>
+                )}
+              </div>
+              
+              <div className="mt-4 pt-4 border-t">
+                <div className="text-xs text-muted-foreground mb-2">Progress</div>
+                <div className="w-full bg-muted rounded-full h-2">
+                  <div 
+                    className="bg-primary h-2 rounded-full transition-all duration-500"
+                    style={{ 
+                      width: `${stats.total > 0 ? (stats.completed / stats.total) * 100 : 0}%` 
+                    }}
+                  ></div>
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0}% Complete
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-card border rounded-lg p-6">
+              <h3 className="font-semibold mb-4">Categories</h3>
+              <div className="space-y-2">
+                {categories.slice(0, 6).map(category => {
+                  const count = todos.filter(t => t.category === category).length
+                  return (
+                    <div key={category} className="flex justify-between items-center text-sm">
+                      <span>{category}</span>
+                      <span className="text-muted-foreground">{count}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="lg:col-span-3 space-y-8">
+            <AddTodoForm 
+              onAddTodo={handleAddTodo}
+              categories={categories}
+            />
+            
+            <TodoList
+              todos={todos}
+              onUpdateTodo={handleUpdateTodo}
+              onDeleteTodo={handleDeleteTodo}
+              categories={categories}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
