@@ -48,6 +48,9 @@ backend/.env
 # OS files
 Thumbs.db
 
+#Notes
+notes_divy.md
+
 # Lock files (optional - some teams prefer to commit these)
 # package-lock.json
 # yarn.lock

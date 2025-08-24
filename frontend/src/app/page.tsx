@@ -1,209 +1,160 @@
 'use client'
 
-import { CheckSquare, Plus, BarChart3, Settings, RefreshCw } from 'lucide-react'
-import { CreateTodoRequest } from '@/types/todo'
-import { AddTodoForm } from '@/components/AddTodoForm'
-import { TodoList } from '@/components/TodoList'
-import { ThemeToggle } from '@/components/ThemeToggle'
+import { CheckSquare, Clock, TrendingUp, Users } from 'lucide-react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { categories } from '@/lib/sampleData'
-import { useTodos } from '@/hooks/useTodos'
+import MainLayout from '@/components/MainLayout'
 
-export default function Home() {
-  const { 
-    todos, 
-    loading, 
-    error, 
-    createTodo, 
-    updateTodo, 
-    deleteTodo,
-    refreshTodos 
-  } = useTodos()
-
-  const handleAddTodo = async (todoRequest: CreateTodoRequest) => {
-    try {
-      await createTodo(todoRequest)
-    } catch (error) {
-      console.error('Failed to create todo:', error)
+export default function Dashboard() {
+  const quickStats = [
+    {
+      title: 'Active Tasks',
+      value: '12',
+      icon: CheckSquare,
+      color: 'bg-blue-500',
+      description: 'Tasks in progress'
+    },
+    {
+      title: 'Completed Today',
+      value: '8',
+      icon: TrendingUp,
+      color: 'bg-green-500',
+      description: 'Tasks finished today'
+    },
+    {
+      title: 'Due This Week',
+      value: '5',
+      icon: Clock,
+      color: 'bg-orange-500',
+      description: 'Upcoming deadlines'
+    },
+    {
+      title: 'Team Projects',
+      value: '3',
+      icon: Users,
+      color: 'bg-purple-500',
+      description: 'Collaborative tasks'
     }
-  }
-
-  const stats = {
-    total: todos.length,
-    completed: todos.filter(t => t.completed).length,
-    inProgress: todos.filter(t => t.status === 'in-progress').length,
-    overdue: todos.filter(t => 
-      t.dueDate && 
-      new Date(t.dueDate) < new Date() && 
-      !t.completed
-    ).length
-  }
+  ]
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <CheckSquare className="h-5 w-5 text-primary-foreground" />
+    <MainLayout>
+      <div className="max-w-7xl mx-auto">
+        {/* Welcome Section */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">Welcome back, Divy!</h1>
+          <p className="text-xl text-muted-foreground">
+            Here's what's happening with your projects today.
+          </p>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {quickStats.map((stat) => {
+            const Icon = stat.icon
+            return (
+              <div key={stat.title} className="bg-card border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`${stat.color} p-2 rounded-lg`}>
+                    <Icon className="h-5 w-5 text-white" />
+                  </div>
+                  <span className="text-2xl font-bold">{stat.value}</span>
+                </div>
+                <h3 className="font-semibold mb-1">{stat.title}</h3>
+                <p className="text-sm text-muted-foreground">{stat.description}</p>
               </div>
-              <div>
-                <h1 className="text-xl font-bold">Divy's Den</h1>
-                <p className="text-sm text-muted-foreground">
-                  All AI experiments in one place
-                </p>
+            )
+          })}
+        </div>
+
+        {/* Main Content Area */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Recent Activity */}
+          <div className="lg:col-span-2">
+            <div className="bg-card border rounded-lg p-6">
+              <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Completed "Setup database connection"</p>
+                    <p className="text-xs text-muted-foreground">2 hours ago</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Started working on "Frontend redesign"</p>
+                    <p className="text-xs text-muted-foreground">4 hours ago</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Due date approaching for "Team meeting"</p>
+                    <p className="text-xs text-muted-foreground">6 hours ago</p>
+                  </div>
+                </div>
               </div>
             </div>
-            
-            <div className="flex items-center gap-4">
-              <div className="hidden sm:flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>{stats.total} Total</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>{stats.completed} Done</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                  <span>{stats.inProgress} In Progress</span>
-                </div>
-                {stats.overdue > 0 && (
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                    <span>{stats.overdue} Overdue</span>
-                  </div>
-                )}
+          </div>
+
+          {/* Quick Actions */}
+          <div className="space-y-6">
+            <div className="bg-card border rounded-lg p-6">
+              <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+              <div className="space-y-3">
+                <Link href="/todos">
+                  <Button className="w-full justify-start">
+                    <CheckSquare className="h-4 w-4 mr-2" />
+                    View All Tasks
+                  </Button>
+                </Link>
+                <Button variant="outline" className="w-full justify-start">
+                  <TrendingUp className="h-4 w-4 mr-2" />
+                  View Analytics
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Users className="h-4 w-4 mr-2" />
+                  Team Collaboration
+                </Button>
               </div>
-              
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm">
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  Analytics
-                </Button>
-                <Button variant="outline" size="sm">
-                  <Settings className="h-4 w-4" />
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={refreshTodos}
-                  disabled={loading}
-                >
-                  <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                </Button>
-                <ThemeToggle />
+            </div>
+
+            <div className="bg-card border rounded-lg p-6">
+              <h2 className="text-xl font-semibold mb-4">Upcoming</h2>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span>Team standup</span>
+                  <span className="text-muted-foreground">Tomorrow</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span>Project review</span>
+                  <span className="text-muted-foreground">Friday</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span>Sprint planning</span>
+                  <span className="text-muted-foreground">Next week</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </header>
 
-      <div className="container mx-auto px-4 py-8">
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <div className="flex items-center gap-2">
-              <div className="text-red-800 font-medium">Error</div>
-            </div>
-            <div className="text-red-600 text-sm mt-1">{error}</div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={refreshTodos}
-              className="mt-2"
-            >
-              Try Again
+        {/* Welcome Message */}
+        <div className="mt-8 bg-gradient-to-r from-primary/10 to-primary/5 border rounded-lg p-8 text-center">
+          <h2 className="text-2xl font-bold mb-2">AI Todo Manager</h2>
+          <p className="text-muted-foreground mb-4">
+            Your intelligent task management companion. More features coming soon!
+          </p>
+          <Link href="/todos">
+            <Button size="lg">
+              Get Started with Tasks
+              <CheckSquare className="h-4 w-4 ml-2" />
             </Button>
-          </div>
-        )}
-        
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
-            <div className="bg-card border rounded-lg p-6">
-              <h3 className="font-semibold mb-4 flex items-center gap-2">
-                <Plus className="h-4 w-4" />
-                Quick Stats
-              </h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Total Tasks</span>
-                  <span className="font-medium">{stats.total}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Completed</span>
-                  <span className="font-medium text-green-600">{stats.completed}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">In Progress</span>
-                  <span className="font-medium text-blue-600">{stats.inProgress}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Pending</span>
-                  <span className="font-medium text-gray-600">
-                    {stats.total - stats.completed - stats.inProgress}
-                  </span>
-                </div>
-                {stats.overdue > 0 && (
-                  <div className="flex justify-between items-center pt-2 border-t">
-                    <span className="text-sm text-red-600">Overdue</span>
-                    <span className="font-medium text-red-600">{stats.overdue}</span>
-                  </div>
-                )}
-              </div>
-              
-              <div className="mt-4 pt-4 border-t">
-                <div className="text-xs text-muted-foreground mb-2">Progress</div>
-                <div className="w-full bg-muted rounded-full h-2">
-                  <div 
-                    className="bg-primary h-2 rounded-full transition-all duration-500"
-                    style={{ 
-                      width: `${stats.total > 0 ? (stats.completed / stats.total) * 100 : 0}%` 
-                    }}
-                  ></div>
-                </div>
-                <div className="text-xs text-muted-foreground mt-1">
-                  {stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0}% Complete
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-card border rounded-lg p-6">
-              <h3 className="font-semibold mb-4">Categories</h3>
-              <div className="space-y-2">
-                {categories.slice(0, 6).map(category => {
-                  const count = todos.filter(t => t.category === category).length
-                  return (
-                    <div key={category} className="flex justify-between items-center text-sm">
-                      <span>{category}</span>
-                      <span className="text-muted-foreground">{count}</span>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="lg:col-span-3 space-y-8">
-            <AddTodoForm 
-              onAddTodo={handleAddTodo}
-              categories={categories}
-            />
-            
-            <TodoList
-              todos={todos}
-              onUpdateTodo={updateTodo}
-              onDeleteTodo={deleteTodo}
-              categories={categories}
-              loading={loading}
-            />
-          </div>
+          </Link>
         </div>
       </div>
-    </div>
+    </MainLayout>
   )
 }
