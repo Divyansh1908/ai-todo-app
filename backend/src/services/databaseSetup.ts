@@ -10,7 +10,8 @@ export async function ensureTablesExist(): Promise<void> {
     // Try to query the table - if it doesn't exist, this will fail
     const { data, error } = await supabase
       .from('todos')
-      .select('count(*)', { count: 'exact', head: true })
+      .select('*', { count: 'exact' })
+      .limit(1)
     
     if (error) {
       if (error.message.includes('relation "public.todos" does not exist')) {

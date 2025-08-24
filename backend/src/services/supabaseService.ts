@@ -85,7 +85,8 @@ class SupabaseService {
     try {
       const { error } = await this.supabase
         .from('todos')
-        .select('count(*)', { count: 'exact', head: true })
+        .select('*', { count: 'exact' })
+        .limit(1)
 
       if (error) {
         console.error('Database connection test failed:', error.message)
