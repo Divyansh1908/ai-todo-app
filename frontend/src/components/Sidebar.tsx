@@ -78,7 +78,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
       {/* Sidebar */}
       <div className={`
         fixed top-0 left-0 z-50 h-full bg-card border-r transition-all duration-300 ease-in-out
-        ${isCollapsed ? '-translate-x-full lg:translate-x-0 lg:w-16' : 'w-80 lg:w-64'}
+        ${isCollapsed ? '-translate-x-full lg:translate-x-0 lg:w-18' : 'w-80 lg:w-64'}
       `}>
         <div className="flex flex-col h-full">
           {/* Header */}
@@ -175,7 +175,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                             variant={theme === option.value ? "default" : "ghost"}
                             size="sm"
                             className="w-full justify-start gap-2 text-sm"
-                            onClick={() => setTheme(option.value)}
+                            onClick={() => setTheme(option.value as any)}
                           >
                             <Icon className="h-4 w-4" />
                             {option.label}
