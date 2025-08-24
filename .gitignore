@@ -48,8 +48,9 @@ backend/.env
 # OS files
 Thumbs.db
 
-#Notes
+#Personal Notes
 notes_divy.md
+claude_conversations.md
 
 # Lock files (optional - some teams prefer to commit these)
 # package-lock.json
