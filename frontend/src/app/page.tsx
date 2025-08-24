@@ -50,9 +50,9 @@ export default function Home() {
                 <CheckSquare className="h-5 w-5 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-xl font-bold">AI Todo Manager</h1>
+                <h1 className="text-xl font-bold">Divy's Den</h1>
                 <p className="text-sm text-muted-foreground">
-                  Organize your tasks with intelligence
+                  All AI experiments in one place
                 </p>
               </div>
             </div>
