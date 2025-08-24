@@ -46,7 +46,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       {/* Main content */}
       <div className={`
         transition-all duration-300 ease-in-out
-        ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'}
+        ${sidebarCollapsed ? 'lg:ml-18' : 'lg:ml-64'}
       `}>
         <main className="p-6">
           {children}

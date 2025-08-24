@@ -14,7 +14,8 @@ import {
   Sun, 
   Monitor,
   LogOut,
-  ChevronDown
+  ChevronDown,
+  PanelLeftClose
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTheme } from './ThemeProvider'
@@ -33,6 +34,20 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Close user menu when sidebar is collapsed
+  useEffect(() => {
+    if (isCollapsed && showUserMenu) {
+      setShowUserMenu(false)
+    }
+  }, [isCollapsed, showUserMenu])
+
+  // Handle sidebar expand click
+  const handleSidebarClick = () => {
+    if (isCollapsed) {
+      setIsCollapsed(false)
+    }
+  }
 
   const navigation = [
     {
@@ -76,20 +91,24 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
       )}
 
       {/* Sidebar */}
-      <div className={`
-        fixed top-0 left-0 z-50 h-full bg-card border-r transition-all duration-300 ease-in-out
-        ${isCollapsed ? '-translate-x-full lg:translate-x-0 lg:w-18' : 'w-80 lg:w-64'}
-      `}>
+      <div 
+        className={`
+          fixed top-0 left-0 z-50 h-full bg-card border-r transition-all duration-300 ease-in-out
+          ${isCollapsed ? '-translate-x-full lg:translate-x-0 lg:w-18' : 'w-80 lg:w-64'}
+           ${isCollapsed ? 'lg:hover:shadow-lg lg:[cursor:e-resize]' : ''}
+        `}
+        onClick={handleSidebarClick}
+      >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="p-6 border-b">
-            <div className="flex items-center justify-between">
-              <div className={`flex items-center gap-3 ${isCollapsed ? 'lg:justify-center' : ''}`}>
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+          <div className={`${isCollapsed ? 'p-3' : 'p-6'} border-b`}>
+            <div className="flex items-center justify-between w-full">
+              <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center w-full' : 'flex-1 min-w-0'}`}>
+                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
                   <CheckSquare className="h-5 w-5 text-primary-foreground" />
                 </div>
                 {!isCollapsed && (
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <h1 className="text-lg font-bold truncate">Divy's Den</h1>
                     <p className="text-sm text-muted-foreground truncate">
                       AI Experimentation Hub
@@ -98,19 +117,39 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                 )}
               </div>
               
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsCollapsed(!isCollapsed)}
-                className="lg:hidden"
-              >
-                <X className="h-4 w-4" />
-              </Button>
+              {!isCollapsed && (
+                <div className="flex items-center gap-1 flex-shrink-0 ml-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setIsCollapsed(true)
+                    }}
+                    className="hidden lg:flex h-8 w-8 p-0 hover:[cursor:w-resize]"
+                    title="Collapse sidebar"
+                  >
+                    <PanelLeftClose className="h-4 w-4" />
+                  </Button>
+                  
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setIsCollapsed(true)
+                    }}
+                    className="lg:hidden h-8 w-8 p-0"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-2">
+          <nav className={`flex-1 ${isCollapsed ? 'p-2' : 'p-4'} space-y-2`}>
             {navigation.map((item) => {
               const Icon = item.icon
               return (
@@ -123,8 +162,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                       ? 'bg-primary text-primary-foreground' 
                       : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     }
-                    ${isCollapsed ? 'lg:justify-center lg:px-2' : ''}
+                    ${isCollapsed ? 'justify-center px-2' : ''}
                   `}
+                  title={isCollapsed ? item.name : ''}
+                  onClick={(e) => !isCollapsed && e.stopPropagation()}
                 >
                   <Icon className="h-5 w-5 flex-shrink-0" />
                   {!isCollapsed && (
@@ -136,17 +177,23 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
           </nav>
 
           {/* User Section */}
-          <div className="p-4 border-t">
+          <div className={`${isCollapsed ? 'p-2' : 'p-4'} border-t`}>
             <div className="relative">
               <Button
                 variant="ghost"
                 className={`
                   w-full justify-start gap-3 p-3 h-auto
-                  ${isCollapsed ? 'lg:justify-center lg:px-2' : ''}
+                  ${isCollapsed ? 'justify-center px-2' : ''}
                 `}
-                onClick={() => setShowUserMenu(!showUserMenu)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  if (!isCollapsed) {
+                    setShowUserMenu(!showUserMenu)
+                  }
+                }}
+                title={isCollapsed ? mockUser.name : ''}
               >
-                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-medium text-sm">
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-medium text-sm flex-shrink-0">
                   {mockUser.initials}
                 </div>
                 {!isCollapsed && (
@@ -155,7 +202,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                       <div className="font-medium truncate">{mockUser.name}</div>
                       <div className="text-xs text-muted-foreground truncate">{mockUser.email}</div>
                     </div>
-                    <ChevronDown className={`h-4 w-4 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`h-4 w-4 transition-transform ${showUserMenu ? 'rotate-180' : ''} flex-shrink-0`} />
                   </>
                 )}
               </Button>
@@ -209,18 +256,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
               )}
             </div>
 
-            {/* Collapsed toggle */}
-            <div className={`mt-3 ${isCollapsed ? 'lg:flex lg:justify-center' : 'hidden lg:block'}`}>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsCollapsed(!isCollapsed)}
-                className="hidden lg:flex"
-              >
-                <Menu className="h-4 w-4" />
-                {!isCollapsed && <span className="ml-2">Collapse</span>}
-              </Button>
-            </div>
           </div>
         </div>
       </div>
