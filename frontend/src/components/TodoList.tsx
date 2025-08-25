@@ -116,7 +116,7 @@ export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loadin
               variant={statusFilter === status ? "default" : "outline"}
               size="sm"
               onClick={() => setStatusFilter(status as FilterStatus)}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 focus-ring interactive"
             >
               {status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ')}
               <span className="bg-background/20 px-1.5 py-0.5 rounded-full text-xs">
@@ -163,7 +163,7 @@ export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loadin
               size="sm"
               onClick={() => toggleSort('title')}
               className={cn(
-                "flex items-center gap-1",
+                "flex items-center gap-1 focus-ring interactive",
                 sortBy === 'title' && "bg-accent"
               )}
             >
@@ -175,7 +175,7 @@ export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loadin
               size="sm"
               onClick={() => toggleSort('priority')}
               className={cn(
-                "flex items-center gap-1",
+                "flex items-center gap-1 focus-ring interactive",
                 sortBy === 'priority' && "bg-accent"
               )}
             >
@@ -187,7 +187,7 @@ export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loadin
               size="sm"
               onClick={() => toggleSort('dueDate')}
               className={cn(
-                "flex items-center gap-1",
+                "flex items-center gap-1 focus-ring interactive",
                 sortBy === 'dueDate' && "bg-accent"
               )}
             >
@@ -201,6 +201,7 @@ export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loadin
               variant={viewMode === 'grid' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setViewMode('grid')}
+              className="focus-ring interactive"
             >
               <Grid className="h-4 w-4" />
             </Button>
@@ -208,6 +209,7 @@ export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loadin
               variant={viewMode === 'list' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setViewMode('list')}
+              className="focus-ring interactive"
             >
               <List className="h-4 w-4" />
             </Button>

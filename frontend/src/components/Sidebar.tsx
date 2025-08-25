@@ -6,9 +6,7 @@ import { usePathname } from 'next/navigation'
 import { 
   CheckSquare, 
   Home, 
-  Menu, 
   X, 
-  User, 
   Settings, 
   Moon, 
   Sun, 
@@ -93,9 +91,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
       {/* Sidebar */}
       <div 
         className={`
-          fixed top-0 left-0 z-50 h-full bg-card border-r transition-all duration-300 ease-in-out
+          fixed top-0 left-0 z-50 h-full bg-card border-r card-shadow interactive
+          transition-all duration-300 ease-in-out
           ${isCollapsed ? '-translate-x-full lg:translate-x-0 lg:w-18' : 'w-80 lg:w-64'}
-           ${isCollapsed ? 'lg:hover:shadow-lg lg:[cursor:e-resize]' : ''}
+          ${isCollapsed ? 'lg:hover:shadow-lg lg:[cursor:e-resize]' : ''}
         `}
         onClick={handleSidebarClick}
       >
@@ -126,7 +125,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                       e.stopPropagation()
                       setIsCollapsed(true)
                     }}
-                    className="hidden lg:flex h-8 w-8 p-0 hover:[cursor:w-resize]"
+                    className="hidden lg:flex h-8 w-8 p-0 hover:[cursor:w-resize] focus-ring interactive"
                     title="Collapse sidebar"
                   >
                     <PanelLeftClose className="h-4 w-4" />
@@ -139,7 +138,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                       e.stopPropagation()
                       setIsCollapsed(true)
                     }}
-                    className="lg:hidden h-8 w-8 p-0"
+                    className="lg:hidden h-8 w-8 p-0 focus-ring interactive"
                   >
                     <X className="h-4 w-4" />
                   </Button>
@@ -157,9 +156,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                   key={item.name}
                   href={item.href}
                   className={`
-                    flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
+                    flex items-center gap-3 px-3 py-2 rounded-lg interactive focus-ring
                     ${item.active 
-                      ? 'bg-primary text-primary-foreground' 
+                      ? 'bg-primary text-primary-foreground shadow-sm' 
                       : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     }
                     ${isCollapsed ? 'justify-center px-2' : ''}
@@ -182,7 +181,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
               <Button
                 variant="ghost"
                 className={`
-                  w-full justify-start gap-3 p-3 h-auto
+                  w-full justify-start gap-3 p-3 h-auto focus-ring interactive
                   ${isCollapsed ? 'justify-center px-2' : ''}
                 `}
                 onClick={(e) => {
@@ -209,7 +208,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
               {/* User Menu Dropdown */}
               {showUserMenu && !isCollapsed && (
-                <div className="absolute bottom-full left-0 right-0 mb-2 bg-popover border rounded-lg shadow-lg p-2">
+                <div className="absolute bottom-full left-0 right-0 mb-2 bg-popover border rounded-lg card-shadow p-2">
                   {/* Theme Selection */}
                   <div className="px-3 py-2">
                     <div className="text-sm font-medium mb-2">Theme</div>
@@ -221,7 +220,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                             key={option.value}
                             variant={theme === option.value ? "default" : "ghost"}
                             size="sm"
-                            className="w-full justify-start gap-2 text-sm"
+                            className="w-full justify-start gap-2 text-sm focus-ring interactive"
                             onClick={() => setTheme(option.value as any)}
                           >
                             <Icon className="h-4 w-4" />
@@ -238,7 +237,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="w-full justify-start gap-2 text-sm"
+                    className="w-full justify-start gap-2 text-sm focus-ring interactive"
                   >
                     <Settings className="h-4 w-4" />
                     Settings
@@ -247,7 +246,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="w-full justify-start gap-2 text-sm text-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+                    className="w-full justify-start gap-2 text-sm text-destructive hover:text-destructive hover:bg-destructive/10 focus-ring interactive"
                   >
                     <LogOut className="h-4 w-4" />
                     Sign out

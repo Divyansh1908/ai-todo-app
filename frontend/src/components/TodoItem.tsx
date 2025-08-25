@@ -53,7 +53,7 @@ export function TodoItem({ todo, onUpdate, onDelete }: TodoItemProps) {
 
   return (
     <div className={cn(
-      "group relative bg-card border rounded-lg p-4 transition-all duration-200 hover:shadow-md",
+      "group relative bg-card border rounded-lg p-4 card-shadow interactive",
       todo.completed && "opacity-75",
       isOverdue && "border-red-200 bg-red-50/50"
     )}>

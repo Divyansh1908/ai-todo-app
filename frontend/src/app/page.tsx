@@ -42,8 +42,8 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Welcome back, Divy!</h1>
-          <p className="text-xl text-muted-foreground">
+          <h1 className="mb-2">Welcome back, Divy!</h1>
+          <p className="text-xl text-muted-foreground leading-relaxed">
             Here's what's happening with your projects today.
           </p>
         </div>
@@ -53,10 +53,10 @@ export default function Dashboard() {
           {quickStats.map((stat) => {
             const Icon = stat.icon
             return (
-              <div key={stat.title} className="bg-card border rounded-lg p-6">
+              <div key={stat.title} className="bg-card border rounded-lg p-6 card-shadow interactive">
                 <div className="flex items-center justify-between mb-4">
-                  <div className={`${stat.color} p-2 rounded-lg`}>
-                    <Icon className="h-5 w-5 text-white" />
+                  <div className="bg-primary p-2 rounded-lg">
+                    <Icon className="h-5 w-5 text-primary-foreground" />
                   </div>
                   <span className="text-2xl font-bold">{stat.value}</span>
                 </div>
@@ -71,8 +71,8 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Recent Activity */}
           <div className="lg:col-span-2">
-            <div className="bg-card border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+            <div className="bg-card border rounded-lg p-6 card-shadow">
+              <h2 className="mb-4">Recent Activity</h2>
               <div className="space-y-4">
                 <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -101,28 +101,28 @@ export default function Dashboard() {
 
           {/* Quick Actions */}
           <div className="space-y-6">
-            <div className="bg-card border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+            <div className="bg-card border rounded-lg p-6 card-shadow">
+              <h2 className="mb-4">Quick Actions</h2>
               <div className="space-y-3">
                 <Link href="/todos">
-                  <Button className="w-full justify-start">
+                  <Button className="w-full justify-start focus-ring interactive">
                     <CheckSquare className="h-4 w-4 mr-2" />
                     View All Tasks
                   </Button>
                 </Link>
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start focus-ring interactive">
                   <TrendingUp className="h-4 w-4 mr-2" />
                   View Analytics
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start focus-ring interactive">
                   <Users className="h-4 w-4 mr-2" />
                   Team Collaboration
                 </Button>
               </div>
             </div>
 
-            <div className="bg-card border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">Upcoming</h2>
+            <div className="bg-card border rounded-lg p-6 card-shadow">
+              <h2 className="mb-4">Upcoming</h2>
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <span>Team standup</span>
@@ -142,13 +142,13 @@ export default function Dashboard() {
         </div>
 
         {/* Welcome Message */}
-        <div className="mt-8 bg-gradient-to-r from-primary/10 to-primary/5 border rounded-lg p-8 text-center">
-          <h2 className="text-2xl font-bold mb-2">AI Todo Manager</h2>
-          <p className="text-muted-foreground mb-4">
+        <div className="mt-8 bg-gradient-to-r from-primary/10 to-primary/5 border rounded-lg p-8 text-center card-shadow">
+          <h2 className="mb-2">AI Todo Manager</h2>
+          <p className="text-muted-foreground mb-4 leading-relaxed">
             Your intelligent task management companion. More features coming soon!
           </p>
           <Link href="/todos">
-            <Button size="lg">
+            <Button size="lg" className="focus-ring interactive">
               Get Started with Tasks
               <CheckSquare className="h-4 w-4 ml-2" />
             </Button>

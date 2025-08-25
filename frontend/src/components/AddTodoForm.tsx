@@ -76,7 +76,7 @@ export function AddTodoForm({ onAddTodo, categories }: AddTodoFormProps) {
   }
 
   return (
-    <div className="bg-card border rounded-lg p-4 space-y-4">
+    <div className="bg-card border rounded-lg p-4 space-y-4 card-shadow">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Input
@@ -202,7 +202,7 @@ export function AddTodoForm({ onAddTodo, categories }: AddTodoFormProps) {
             </div>
 
             <div className="flex gap-2 pt-2">
-              <Button type="submit" className="flex-1">
+              <Button type="submit" className="flex-1 focus-ring interactive">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Todo
               </Button>
@@ -210,7 +210,7 @@ export function AddTodoForm({ onAddTodo, categories }: AddTodoFormProps) {
                 type="button" 
                 variant="outline" 
                 onClick={handleAiEnhance}
-                className="px-4"
+                className="px-4 focus-ring interactive"
               >
                 <Wand2 className="h-4 w-4 mr-2" />
                 AI Enhance
@@ -238,7 +238,7 @@ export function AddTodoForm({ onAddTodo, categories }: AddTodoFormProps) {
         )}
         
         {!isExpanded && formData.title && (
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full focus-ring interactive">
             <Plus className="h-4 w-4 mr-2" />
             Add Todo
           </Button>

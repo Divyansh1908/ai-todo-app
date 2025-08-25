@@ -46,7 +46,7 @@ export default function TodosPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold">Todo List</h1>
+              <h1>Todo List</h1>
               <p className="text-muted-foreground mt-1">
                 Manage your tasks and stay organized
               </p>
@@ -54,7 +54,7 @@ export default function TodosPage() {
             
             <div className="flex items-center gap-4">
               {/* Stats display */}
-              <div className="hidden sm:flex items-center gap-4 text-sm bg-card border rounded-lg px-4 py-2">
+              <div className="hidden sm:flex items-center gap-4 text-sm bg-card border rounded-lg px-4 py-2 card-shadow">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                   <span>{stats.total} Total</span>
@@ -76,7 +76,7 @@ export default function TodosPage() {
               </div>
               
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="focus-ring interactive">
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Analytics
                 </Button>
@@ -85,6 +85,7 @@ export default function TodosPage() {
                   size="sm" 
                   onClick={refreshTodos}
                   disabled={loading}
+                  className="focus-ring interactive"
                 >
                   <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
                 </Button>
