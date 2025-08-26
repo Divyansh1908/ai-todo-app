@@ -22,6 +22,27 @@ backend/dist/
 .DS_Store
 *.pem
 
+# Add these to your existing .gitignore file:
+
+# TypeScript build info
+*.tsbuildinfo
+**/tsconfig.tsbuildinfo
+
+# Next.js specific cache and build files
+**/.next/
+**/out/
+**/*.tsbuildinfo
+
+# Webpack and build artifacts (the specific files you were seeing)
+**/webpack-runtime.js
+**/*-manifest.json
+**/*-manifest.js
+**/trace
+
+# Cache directories
+**/.cache/
+**/cache/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
