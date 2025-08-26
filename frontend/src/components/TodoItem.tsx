@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { useCurrentTime } from '@/hooks/useCurrentTime'
 import { cn, formatDate, getPriorityColor, getStatusColor } from '@/lib/utils'
 
 interface TodoItemProps {
@@ -19,6 +20,7 @@ export function TodoItem({ todo, onUpdate, onDelete }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(todo.title)
   const [editDescription, setEditDescription] = useState(todo.description || '')
+  const { isOverdue } = useCurrentTime()
 
   const handleSave = async () => {
     try {
@@ -49,13 +51,13 @@ export function TodoItem({ todo, onUpdate, onDelete }: TodoItemProps) {
     }
   }
 
-  const isOverdue = todo.dueDate && new Date(todo.dueDate) < new Date() && !todo.completed
+  const todoIsOverdue = isOverdue(todo.dueDate || null, todo.completed)
 
   return (
     <div className={cn(
       "group relative bg-card border rounded-lg p-4 card-shadow interactive",
       todo.completed && "opacity-75",
-      isOverdue && "border-red-200 bg-red-50/50"
+      todoIsOverdue && "border-red-200 bg-red-50/50 dark:border-red-800 dark:bg-red-950/50"
     )}>
       <div className="flex items-start gap-3">
         <Checkbox
@@ -129,12 +131,13 @@ export function TodoItem({ todo, onUpdate, onDelete }: TodoItemProps) {
                 {todo.dueDate && (
                   <span className={cn(
                     "inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium",
-                    isOverdue 
-                      ? "bg-red-100 text-red-800 border border-red-200" 
-                      : "bg-gray-100 text-gray-700 border border-gray-200"
+                    todoIsOverdue 
+                      ? "bg-red-100 text-red-800 border border-red-200 dark:bg-red-950 dark:text-red-200 dark:border-red-800" 
+                      : "bg-gray-100 text-gray-700 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                   )}>
                     <Calendar className="h-3 w-3" />
                     {formatDate(todo.dueDate)}
+                    {todoIsOverdue && <span className="text-red-600 dark:text-red-400 font-bold ml-1">!</span>}
                   </span>
                 )}
 

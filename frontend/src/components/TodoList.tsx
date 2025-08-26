@@ -7,6 +7,7 @@ import { TodoItem } from './TodoItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useCurrentTime } from '@/hooks/useCurrentTime'
 import { cn } from '@/lib/utils'
 
 interface TodoListProps {
@@ -25,6 +26,7 @@ export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loadin
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
   const [sortBy, setSortBy] = useState<SortOption>('createdAt')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+  const { isOverdue } = useCurrentTime()
 
   const filteredAndSortedTodos = useMemo(() => {
     let filtered = todos.filter(todo => {
@@ -33,8 +35,13 @@ export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loadin
         todo.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         todo.description?.toLowerCase().includes(searchQuery.toLowerCase())
       
-      // Status filter
-      const matchesStatus = statusFilter === 'all' || todo.status === statusFilter
+      // Status filter - including overdue
+      let matchesStatus = true
+      if (statusFilter === 'overdue') {
+        matchesStatus = isOverdue(todo.dueDate || null, todo.completed)
+      } else if (statusFilter !== 'all') {
+        matchesStatus = todo.status === statusFilter
+      }
       
       // Priority filter
       const matchesPriority = priorityFilter === 'all' || todo.priority === priorityFilter
@@ -71,7 +78,7 @@ export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loadin
     })
 
     return filtered
-  }, [todos, searchQuery, statusFilter, priorityFilter, categoryFilter, sortBy, sortOrder])
+  }, [todos, searchQuery, statusFilter, priorityFilter, categoryFilter, sortBy, sortOrder, isOverdue])
 
   const toggleSort = (field: SortOption) => {
     if (sortBy === field) {
@@ -83,11 +90,13 @@ export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loadin
   }
 
   const getStatusCounts = () => {
+    const overdueCount = todos.filter(t => isOverdue(t.dueDate || null, t.completed)).length
     return {
       all: todos.length,
       todo: todos.filter(t => t.status === 'todo').length,
       'in-progress': todos.filter(t => t.status === 'in-progress').length,
-      completed: todos.filter(t => t.status === 'completed').length
+      completed: todos.filter(t => t.status === 'completed').length,
+      overdue: overdueCount
     }
   }
 
@@ -116,10 +125,21 @@ export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loadin
               variant={statusFilter === status ? "default" : "outline"}
               size="sm"
               onClick={() => setStatusFilter(status as FilterStatus)}
-              className="flex items-center gap-2 focus-ring interactive"
+              className={cn(
+                "flex items-center gap-2 focus-ring interactive",
+                status === 'overdue' && count > 0 && statusFilter !== status && "border-red-200 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-300 dark:hover:bg-red-950",
+                status === 'overdue' && statusFilter === status && "bg-red-600 hover:bg-red-700 text-white"
+              )}
             >
               {status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ')}
-              <span className="bg-background/20 px-1.5 py-0.5 rounded-full text-xs">
+              <span className={cn(
+                "px-1.5 py-0.5 rounded-full text-xs",
+                statusFilter === status 
+                  ? "bg-background/20" 
+                  : status === 'overdue' && count > 0 
+                    ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200" 
+                    : "bg-background/20"
+              )}>
                 {count}
               </span>
             </Button>

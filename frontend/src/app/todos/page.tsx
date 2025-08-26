@@ -8,6 +8,7 @@ import { Clock } from '@/components/Clock'
 import { Button } from '@/components/ui/button'
 import { categories } from '@/lib/sampleData'
 import { useTodos } from '@/hooks/useTodos'
+import { useCurrentTime } from '@/hooks/useCurrentTime'
 import MainLayout from '@/components/MainLayout'
 
 export default function TodosPage() {
@@ -20,6 +21,8 @@ export default function TodosPage() {
     deleteTodo,
     refreshTodos 
   } = useTodos()
+  
+  const { isOverdue } = useCurrentTime()
 
   const handleAddTodo = async (todoRequest: CreateTodoRequest) => {
     try {
@@ -33,11 +36,7 @@ export default function TodosPage() {
     total: todos.length,
     completed: todos.filter(t => t.completed).length,
     inProgress: todos.filter(t => t.status === 'in-progress').length,
-    overdue: todos.filter(t => 
-      t.dueDate && 
-      new Date(t.dueDate) < new Date() && 
-      !t.completed
-    ).length
+    overdue: todos.filter(t => isOverdue(t.dueDate || null, t.completed)).length
   }
 
   return (

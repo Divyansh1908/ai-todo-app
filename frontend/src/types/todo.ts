@@ -30,5 +30,5 @@ export interface UpdateTodoRequest {
   dueDate?: string
 }
 
-export type FilterStatus = 'all' | 'todo' | 'in-progress' | 'completed'
+export type FilterStatus = 'all' | 'todo' | 'in-progress' | 'completed' | 'overdue'
 export type SortOption = 'dueDate' | 'priority' | 'createdAt' | 'title'

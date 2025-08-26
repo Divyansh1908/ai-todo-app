@@ -1,20 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { Clock as ClockIcon } from 'lucide-react'
+import { useCurrentTime } from '@/hooks/useCurrentTime'
 
 export function Clock() {
-  const [time, setTime] = useState<Date>(new Date())
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-    const timer = setInterval(() => {
-      setTime(new Date())
-    }, 60000) // Update every minute instead of every second
-
-    return () => clearInterval(timer)
-  }, [])
+  const { currentTime, mounted } = useCurrentTime()
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
@@ -53,14 +43,14 @@ export function Clock() {
       <ClockIcon className="h-4 w-4 text-primary" />
       <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
         <div className="flex items-center gap-2">
-          <span className="font-medium">{formatTime(time)}</span>
+          <span className="font-medium">{formatTime(currentTime)}</span>
           <span className="text-muted-foreground text-xs">
-            {getTimezone(time)}
+            {getTimezone(currentTime)}
           </span>
         </div>
         <div className="hidden sm:block text-muted-foreground">•</div>
         <span className="text-muted-foreground text-xs">
-          {formatDate(time)}
+          {formatDate(currentTime)}
         </span>
       </div>
     </div>
