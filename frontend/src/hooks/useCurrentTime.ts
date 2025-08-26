@@ -1,5 +1,59 @@
 'use client'
 
+/*
+
+Why use this hook - 
+
+Great question! Let me explain why we created this as a custom hook and the benefits of this approach:
+
+🎯 Why Create a Custom Hook?
+The Problem Without a Hook:
+If we didn't use a custom hook, each component would have to duplicate this logic:
+
+✅ Benefits of Using a Custom Hook:
+1. DRY Principle (Don't Repeat Yourself)
+2. Shared State Management
+3. Centralized Logic
+4. Easy Testing
+5. Performance Benefits
+🏗️ Architecture Comparison:
+Without Custom Hook (Bad):
+Result: 3 timers, duplicated code, potential inconsistencies
+Clock Component ──► Own timer, own logic, own state
+TodoItem Component ──► Own timer, own logic, own state  
+TodosPage Component ──► Own timer, own logic, own state
+
+With Custom Hook (Good):
+useCurrentTime Hook ──► One timer, shared logic, shared state
+         ↙       ↓       ↘
+    Clock   TodoItem   TodosPage
+Result: 1 timer, no duplication, consistent data 
+
+🎪 Real-World Analogy:
+Think of it like a radio station:
+
+Without Hook = Everyone has their own radio station:
+
+Clock has "Time Radio 101.1"
+TodoItem has "Time Radio 102.5"
+TodosPage has "Time Radio 103.9"
+Each broadcasts slightly different times! 📻📻📻
+With Hook = Everyone listens to the same station:
+
+One "Master Time Radio 100.1"
+Everyone gets the exact same time
+More efficient, consistent! 📻➡️🎧🎧🎧
+🚀 Key Benefits Summary:
+Code Reusability - Write once, use everywhere
+Consistency - All components use the same time source
+Performance - One timer instead of multiple
+Maintainability - Change logic in one place
+Testing - Test once, works everywhere
+Memory Efficiency - Shared resources instead of duplicated
+This is exactly why React hooks exist - to share stateful logic across components without duplication! 🎯
+
+*/
+
 import { useState, useEffect } from 'react'
 
 export function useCurrentTime() {
