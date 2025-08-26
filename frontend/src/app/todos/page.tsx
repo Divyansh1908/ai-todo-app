@@ -4,6 +4,7 @@ import { RefreshCw, Plus, BarChart3 } from 'lucide-react'
 import { CreateTodoRequest } from '@/types/todo'
 import { AddTodoForm } from '@/components/AddTodoForm'
 import { TodoList } from '@/components/TodoList'
+import { Clock } from '@/components/Clock'
 import { Button } from '@/components/ui/button'
 import { categories } from '@/lib/sampleData'
 import { useTodos } from '@/hooks/useTodos'
@@ -45,11 +46,16 @@ export default function TodosPage() {
         {/* Page Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1>Todo List</h1>
-              <p className="text-muted-foreground mt-1">
-                Manage your tasks and stay organized
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-6">
+              <div>
+                <h1>Todo List</h1>
+                <p className="text-muted-foreground mt-1">
+                  Manage your tasks and stay organized
+                </p>
+              </div>
+              <div className="mt-3 sm:mt-0">
+                <Clock />
+              </div>
             </div>
             
             <div className="flex items-center gap-4">
