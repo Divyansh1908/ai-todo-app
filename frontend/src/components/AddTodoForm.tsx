@@ -37,9 +37,17 @@ export function AddTodoForm({ onAddTodo, categories }: AddTodoFormProps) {
       newErrors.category = 'Category is required'
     }
     
-    if (formData.dueDate && new Date(formData.dueDate) < new Date()) {
-      newErrors.dueDate = 'Due date cannot be in the past'
-    }
+    if (formData.dueDate ) {
+      const selectedDate = new Date(formData.dueDate)
+      const today = new Date()
+        // Set selected date to END of day (11:59:59 PM)
+      selectedDate.setHours(23, 59, 59, 999)
+      
+      // Compare: Is the END of selected day before current time?
+      if (selectedDate < today) {
+        newErrors.dueDate = 'Due date must be today or later'
+      }
+    } 
     
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
