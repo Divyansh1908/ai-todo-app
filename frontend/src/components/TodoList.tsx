@@ -242,7 +242,7 @@ export function TodoList({ todos, onUpdateTodo, onDeleteTodo, categories, loadin
         Showing {filteredAndSortedTodos.length} of {todos.length} todos
         {sortBy && (
           <span className="ml-2">
-            · Sorted by {sortBy} ({sortOrder === 'asc' ? 'ascending' : 'descending'})
+            · Sorted by Time of Creation ({sortOrder === 'asc' ? 'Ascending' : 'Descending'})
           </span>
         )}
       </div>

@@ -57,7 +57,7 @@ export function TodoItem({ todo, onUpdate, onDelete }: TodoItemProps) {
     <div className={cn(
       "group relative bg-card border rounded-lg p-4 card-shadow interactive",
       todo.completed && "opacity-75",
-      todoIsOverdue && "border-red-200 bg-red-50/50 dark:border-red-800 dark:bg-red-950/50"
+      todoIsOverdue && "border-destructive/30 bg-destructive/5 dark:border-destructive/50 dark:bg-destructive/10"
     )}>
       <div className="flex items-start gap-3">
         <Checkbox

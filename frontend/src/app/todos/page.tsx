@@ -80,7 +80,7 @@ export default function TodosPage() {
                 )}
               </div>
               
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" className="focus-ring interactive">
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Analytics
@@ -94,7 +94,7 @@ export default function TodosPage() {
                 >
                   <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
                 </Button>
-              </div>
+              </div> */}
             </div>
           </div>
 
